@@ -1,10 +1,14 @@
+package code.learning;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+@ComponentScan(basePackages = {"code/learning/api", "code/learning/domain"})
+@SpringBootApplication
 @Configuration
-@ComponentScan(basePackages = "datatype")
 @EnableAutoConfiguration
 public class Application {
 
