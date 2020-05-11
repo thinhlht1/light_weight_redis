@@ -14,9 +14,12 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    compile 'info.cukes:cucumber-java:1.1.5'
+    testCompile 'info.cukes:cucumber-junit:1.1.5'
+    compile 'info.cukes:cucumber-core:1.1.5'
+    testCompile 'info.cukes:cucumber-spring:1.1.5'
+    testCompile 'org.springframework:spring-test:5.2.6.RELEASE'
 }
 
 test {
