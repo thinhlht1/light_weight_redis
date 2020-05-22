@@ -1,7 +1,7 @@
 Feature: Set api for string
   Background:
   Scenario: calling set api
-    When web client make api call to "POST":"/string/set/key/value" with request
+    When web client make api call to "POST":"/string/set" with request
     """
     {
     "header": {

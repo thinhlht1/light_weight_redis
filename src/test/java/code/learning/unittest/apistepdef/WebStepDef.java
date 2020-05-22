@@ -1,12 +1,11 @@
 package code.learning.unittest.apistepdef;
 
-import code.learning.domain.SpringContainer;
 import code.learning.unittest.ApplicationTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import cucumber.api.java.Before;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
@@ -27,19 +26,16 @@ import java.util.Map;
 
 @ContextConfiguration(classes = ApplicationTest.class, initializers = ConfigFileApplicationContextInitializer.class)
 @WebAppConfiguration
-public class WebStepDef {
+public class WebStepDef extends BaseStepDef {
     private MockMvc mockMvc;
-
-    @Autowired
-    protected WebApplicationContext wac;
 
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
-    @Given("^web client make api call to \"([^\"]*)\":\"([^\"]*)\" with request")
-    public void web_client_make_api_call_to_with_body(String method, String path, String body) throws JSONException {
+    @When("^web client make api call to \"([^\"]*)\":\"([^\"]*)\" with request")
+    public void web_client_make_api_call_to_with_request(String method, String path, String body) throws JSONException {
         try {
             HashMap<String, Object> requestJson = new ObjectMapper().readValue(body, HashMap.class);
             MockHttpServletRequestBuilder requestBuilder =
@@ -63,8 +59,7 @@ public class WebStepDef {
                 requestBuilder.header(header.getKey(), header.getValue());
             }
 
-            ResultActions resultActions = mockMvc.perform(requestBuilder);
-            System.out.println(String.format("Debug: %s", resultActions));
+            resultStore.putWebApiResult(path, method, this.mockMvc.perform(requestBuilder));
 
         } catch (Throwable tr) {
             System.out.println(String.format("Error: %s", tr));
