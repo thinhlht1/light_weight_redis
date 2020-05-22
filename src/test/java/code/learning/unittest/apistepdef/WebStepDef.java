@@ -1,18 +1,15 @@
 package code.learning.unittest.apistepdef;
 
-import code.learning.Application;
 import code.learning.domain.SpringContainer;
 import code.learning.unittest.ApplicationTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
+import cucumber.api.java.Before;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -31,25 +28,19 @@ import java.util.Map;
 @ContextConfiguration(classes = ApplicationTest.class, initializers = ConfigFileApplicationContextInitializer.class)
 @WebAppConfiguration
 public class WebStepDef {
-    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     protected WebApplicationContext wac;
 
-//    @Before
-//    public void setup() {
-//        ApplicationContext app = SpringContainer.ctx();
-//        this.wac = SpringContainer.ctx().getBean(WebApplicationContext.class);
-//        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-//    }
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    }
 
     @Given("^web client make api call to \"([^\"]*)\":\"([^\"]*)\" with request")
     public void web_client_make_api_call_to_with_body(String method, String path, String body) throws JSONException {
         try {
-            ApplicationContext app = SpringContainer.ctx();
-            this.wac = SpringContainer.ctx().getBean(WebApplicationContext.class);
-            this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
             HashMap<String, Object> requestJson = new ObjectMapper().readValue(body, HashMap.class);
             MockHttpServletRequestBuilder requestBuilder =
                     MockMvcRequestBuilders.request(method, new URI(path))
@@ -73,7 +64,7 @@ public class WebStepDef {
             }
 
             ResultActions resultActions = mockMvc.perform(requestBuilder);
-            System.out.println(resultActions);
+            System.out.println(String.format("Debug: %s", resultActions));
 
         } catch (Throwable tr) {
             System.out.println(String.format("Error: %s", tr));
