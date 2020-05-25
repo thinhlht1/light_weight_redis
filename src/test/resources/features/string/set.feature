@@ -19,4 +19,19 @@ Feature: Set api for string
       "body": "set key: key with value: value successfully"
      }
     """
+    When web client make api call to "GET":"/string/get/key" with request
+    """
+    {
+    "header": {
+      "Content-Type": "text/plain;charset=UTF-8"
+      },
+    "params": {}
+    }
+    """
+    Then "GET":"/string/get/key" response with body
+    """
+    {
+      "body": "value1"
+    }
+    """
 
