@@ -13,10 +13,10 @@ Feature: Set api for string
       }
     }
     """
-    Then "/string/set/key/value" response with body
+    Then "POST":"/string/set" response with body
     """
-    {
+     {
       "body": "set key: key with value: value successfully"
-    }
+     }
     """
 
